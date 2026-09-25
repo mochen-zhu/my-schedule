@@ -29,32 +29,32 @@ App.views.home = {
       <div class="home-date-bar">
         <div class="date-main">${today} ${weekday}</div>
         <div class="date-meta">
-          ${weekNum ? `秋季第 ${weekNum} 周` : '假期'}
-          ${isHoliday ? `<span class="holiday-tag">${holidayName}（休）</span>` : ''}
+          ${weekNum ? `W${String(weekNum).padStart(2, '0')} / FALL 2026` : 'OFF-TERM'}
+          ${isHoliday ? `<span class="holiday-tag">${holidayName} / 休</span>` : ''}
         </div>
       </div>
 
       <div class="status-card" id="status-card">
-        ${this.renderStatusCard(todayCourses, isHoliday)}
+        ${this.renderStatusCard(todayCourses, isHoliday, holidayName)}
       </div>
 
       <div class="home-section">
         <div class="section-header">
-          <h2>今日课程</h2>
-          <span class="section-count">${todayCourses.length} 节</span>
+          <h2>01 / 今日课程</h2>
+          <span class="section-count">${todayCourses.length} NODES</span>
         </div>
         <div id="today-courses">
-          ${todayCourses.length === 0 ? '<div class="empty-state">今天没有课</div>' : this.renderCoursesList(todayCourses)}
+          ${todayCourses.length === 0 ? '<div class="empty-state">NO DATA</div>' : this.renderCoursesList(todayCourses)}
         </div>
       </div>
 
       <div class="home-section">
         <div class="section-header">
-          <h2>今日日程</h2>
-          <button class="btn btn-primary btn-small" id="add-today-event">＋</button>
+          <h2>02 / 今日日程</h2>
+          <button class="btn btn-primary btn-small" id="add-today-event">＋ ADD</button>
         </div>
         <div id="today-events">
-          ${todayEvents.length === 0 ? '<div class="empty-state">今天没有日程</div>' : this.renderEventsList(todayEvents)}
+          ${todayEvents.length === 0 ? '<div class="empty-state">NO DATA</div>' : this.renderEventsList(todayEvents)}
         </div>
       </div>
     `;
@@ -64,7 +64,7 @@ App.views.home = {
 
   getTodayCourses() {
     const today = new Date();
-    const weekday = today.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+    const weekday = today.getDay();
     const weekNum = App.calendar.getWeekNumber(App.calendar.today());
 
     if (!weekNum || weekday === 0) return [];
@@ -87,9 +87,9 @@ App.views.home = {
     return App.calendar.formatDate(date);
   },
 
-  renderStatusCard(courses, isHoliday) {
+  renderStatusCard(courses, isHoliday, holidayName) {
     if (isHoliday) {
-      return `<div class="status-holiday"> 今日节假日，好好休息！</div>`;
+      return `<div class="status-holiday">▌ HOLIDAY MODE — ${holidayName}（休）</div>`;
     }
 
     const now = new Date();
@@ -106,8 +106,8 @@ App.views.home = {
           <div class="status-in-class">
             <div class="status-icon">▶</div>
             <div class="status-text">
-              <div class="status-title">正在上课：${course.name}</div>
-              <div class="status-detail">${course.room} · 下课 ${endPeriod.end}</div>
+              <div class="status-title">ACTIVE / ${course.name}</div>
+              <div class="status-detail">${course.room} · END ${endPeriod.end}</div>
             </div>
           </div>
         `;
@@ -117,9 +117,9 @@ App.views.home = {
         const minutesUntil = startMinutes - currentTime;
         return `
           <div class="status-next">
-            <div class="status-icon">⏰</div>
+            <div class="status-icon">◷</div>
             <div class="status-text">
-              <div class="status-title">下一节 ${startPeriod.start} · 还有${minutesUntil}分钟</div>
+              <div class="status-title">NEXT / ${startPeriod.start} · T-${minutesUntil}MIN</div>
               <div class="status-detail">${course.name} · ${course.room}</div>
             </div>
           </div>
@@ -127,7 +127,7 @@ App.views.home = {
       }
     }
 
-    return `<div class="status-done">✓ 今日课程已结束</div>`;
+    return `<div class="status-done">▌ SESSION COMPLETE</div>`;
   },
 
   timeToMinutes(timeStr) {
@@ -152,7 +152,7 @@ App.views.home = {
       return `
         <div class="course-card ${status}" data-course-id="${course.id}">
           <div class="course-time">
-            <div class="course-period">第${course.periods[0]}–${course.periods[1]}节</div>
+            <div class="course-period">P${course.periods[0]}–${course.periods[1]}</div>
             <div class="course-time-range">${startPeriod.start}–${endPeriod.end}</div>
           </div>
           <div class="course-info">
@@ -174,7 +174,7 @@ App.views.home = {
             <span>${event.title}</span>
           </label>
           <div class="event-time">${timeStr}</div>
-          ${event.location ? `<div class="event-location">📍 ${event.location}</div>` : ''}
+          ${event.location ? `<div class="event-location">LOC / ${event.location}</div>` : ''}
         </div>
       `;
     }).join('');
@@ -203,29 +203,29 @@ App.views.home = {
   openQuickAddModal() {
     const today = App.calendar.today();
     const content = `
-      <h3>快速新增日程</h3>
+      <h3>QUICK ADD / 快速新增</h3>
       <form id="quick-event-form">
         <div class="form-group">
-          <label>标题 *</label>
+          <label>TITLE / 标题 *</label>
           <input type="text" name="title" required>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>开始时间</label>
+            <label>START / 开始</label>
             <input type="time" name="startTime">
           </div>
           <div class="form-group">
-            <label>结束时间</label>
+            <label>END / 结束</label>
             <input type="time" name="endTime">
           </div>
         </div>
         <div class="form-group">
-          <label>地点</label>
+          <label>LOC / 地点</label>
           <input type="text" name="location">
         </div>
         <div class="form-actions">
-          <button type="button" class="btn" onclick="App.modal.close()">取消</button>
-          <button type="submit" class="btn btn-primary">创建</button>
+          <button type="button" class="btn" onclick="App.modal.close()">CANCEL</button>
+          <button type="submit" class="btn btn-primary">CREATE</button>
         </div>
       </form>
     `;

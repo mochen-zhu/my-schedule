@@ -1,16 +1,16 @@
+@import url('https://cdn.jsdelivr.net/npm/zpix@1.0.2/dist/zpix.woff2') format('woff2');
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap');
+
 :root {
-  --primary: #2563eb;
-  --primary-light: #dbeafe;
-  --text: #1f2937;
-  --text-light: #6b7280;
-  --bg: #f9fafb;
-  --border: #e5e7eb;
-  --course-1: #fbbf24;
-  --course-2: #34d399;
-  --course-3: #60a5fa;
-  --course-4: #f87171;
-  --course-5: #a78bfa;
-  --course-6: #fb923c;
+  --paper: #EAE5D8;
+  --ink: #1F1D1A;
+  --navy: #2E3A8C;
+  --gray: #8A8578;
+  --border: #1F1D1A;
+  --font-pixel: 'Zpix', 'Fusion Pixel', 'DotGothic16', monospace;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', 'Space Mono', 'Menlo', monospace;
+  --font-body: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
 }
 
 * {
@@ -20,10 +20,25 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  color: var(--text);
-  background: var(--bg);
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
   line-height: 1.6;
+  font-size: 14px;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 23px,
+      rgba(31, 29, 26, 0.03) 23px,
+      rgba(31, 29, 26, 0.03) 24px
+    );
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--navy);
+  color: var(--paper);
 }
 
 .top-bar {
@@ -31,8 +46,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  height: 56px;
-  background: white;
+  height: 48px;
+  background: var(--paper);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -40,33 +55,39 @@ body {
 }
 
 .logo {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--primary);
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  color: var(--ink);
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .tabs {
   display: flex;
-  gap: 8px;
+  gap: 0;
 }
 
 .tab {
   padding: 8px 16px;
   text-decoration: none;
-  color: var(--text-light);
-  border-radius: 6px;
-  transition: all 0.2s;
+  color: var(--gray);
+  border: 1px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: none;
 }
 
 .tab:hover {
-  background: var(--bg);
-  color: var(--text);
+  color: var(--ink);
+  border-color: var(--border);
 }
 
 .tab.active {
-  background: var(--primary-light);
-  color: var(--primary);
-  font-weight: 500;
+  background: var(--navy);
+  color: var(--paper);
+  border-color: var(--navy);
 }
 
 .view {
@@ -102,13 +123,13 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(31, 29, 26, 0.6);
 }
 
 .modal-content {
   position: relative;
-  background: white;
-  border-radius: 12px;
+  background: var(--paper);
+  border: 2px solid var(--border);
   padding: 24px;
   max-width: 500px;
   width: 90%;
@@ -117,7 +138,17 @@ body {
   z-index: 1001;
 }
 
-/* 课表页样式 */
+.modal-content h3 {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
 .timetable-toolbar {
   display: flex;
   align-items: center;
@@ -129,65 +160,77 @@ body {
 .btn {
   padding: 6px 12px;
   border: 1px solid var(--border);
-  background: white;
-  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
   cursor: pointer;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: none;
 }
 
 .btn:hover:not(:disabled) {
-  background: var(--bg);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .btn-primary {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
+  background: var(--navy);
+  color: var(--paper);
+  border-color: var(--navy);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: var(--ink);
+  border-color: var(--ink);
 }
 
 .week-label {
-  font-weight: 600;
-  font-size: 16px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 1px;
 }
 
 .date-range {
-  color: var(--text-light);
-  font-size: 14px;
+  color: var(--gray);
+  font-family: var(--font-mono);
+  font-size: 12px;
 }
 
 .holiday-bar {
-  background: #fef3c7;
-  border: 1px solid #fbbf24;
+  background: var(--paper);
+  border: 2px solid var(--border);
   padding: 8px 12px;
-  border-radius: 6px;
   margin-bottom: 16px;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.5px;
 }
 
 .timetable-grid {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .grid-header {
   display: grid;
   grid-template-columns: 60px repeat(7, 1fr);
-  background: var(--bg);
+  background: var(--ink);
+  color: var(--paper);
   border-bottom: 1px solid var(--border);
-  font-weight: 600;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .grid-header > div {
@@ -203,7 +246,7 @@ body {
 .grid-row {
   display: grid;
   grid-template-columns: 60px repeat(7, 1fr);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(31, 29, 26, 0.15);
 }
 
 .grid-row:last-child {
@@ -213,16 +256,22 @@ body {
 .period-cell {
   padding: 4px 8px;
   text-align: center;
-  font-size: 12px;
-  background: var(--bg);
-  border-right: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: rgba(31, 29, 26, 0.03);
+  border-right: 1px solid rgba(31, 29, 26, 0.15);
+}
+
+.period-cell small {
+  font-size: 9px;
+  color: var(--gray);
 }
 
 .grid-cell {
   min-height: 40px;
-  border-right: 1px solid var(--border);
+  border-right: 1px solid rgba(31, 29, 26, 0.15);
   padding: 4px;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .grid-cell:last-child {
@@ -230,39 +279,46 @@ body {
 }
 
 .grid-cell.today {
-  background: var(--primary-light);
+  background: rgba(46, 58, 140, 0.08);
+  border: 1px solid var(--navy);
 }
 
 .grid-cell.holiday {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--paper);
+  color: var(--gray);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-mono);
   font-weight: 600;
+  font-size: 12px;
 }
 
 .grid-cell.course {
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: none;
+  border-left: 2px solid var(--navy);
 }
 
 .grid-cell.course:hover {
-  opacity: 0.8;
+  outline: 2px solid var(--navy);
+  outline-offset: -2px;
 }
 
 .course-name {
-  font-weight: 600;
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 10px;
   margin-bottom: 2px;
+  letter-spacing: 0.3px;
 }
 
 .course-room {
-  font-size: 10px;
-  opacity: 0.8;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--gray);
 }
 
-/* 日程页样式 */
 .events-toolbar {
   display: flex;
   justify-content: space-between;
@@ -272,45 +328,56 @@ body {
 
 .tabs-inline {
   display: flex;
-  gap: 8px;
+  gap: 0;
 }
 
 .tab-btn {
   padding: 6px 16px;
   border: 1px solid var(--border);
-  background: white;
-  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
   cursor: pointer;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: none;
+}
+
+.tab-btn + .tab-btn {
+  border-left: none;
 }
 
 .tab-btn.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
+  background: var(--navy);
+  color: var(--paper);
+  border-color: var(--navy);
 }
 
 .empty-state {
   text-align: center;
   padding: 48px 24px;
-  color: var(--text-light);
+  color: var(--gray);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
 }
 
 .event-card {
   display: flex;
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--border);
-  border-radius: 8px;
   margin-bottom: 12px;
   overflow: hidden;
 }
 
 .event-card.overdue {
-  border-color: #f87171;
+  border-color: var(--navy);
+  border-width: 2px;
 }
 
 .event-card.done {
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .event-color {
@@ -338,9 +405,18 @@ body {
   flex: 1;
 }
 
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--navy);
+  cursor: pointer;
+}
+
 .event-title {
-  font-weight: 600;
-  font-size: 15px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.3px;
 }
 
 .event-card.done .event-title {
@@ -354,51 +430,59 @@ body {
 
 .btn-icon {
   background: none;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   padding: 4px 8px;
-  border-radius: 4px;
+  color: var(--gray);
+  transition: none;
 }
 
 .btn-icon:hover {
-  background: var(--bg);
+  border-color: var(--border);
+  color: var(--ink);
 }
 
 .event-meta {
   display: flex;
   gap: 16px;
-  font-size: 13px;
-  color: var(--text-light);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray);
   flex-wrap: wrap;
+  letter-spacing: 0.3px;
 }
 
 .overdue-tag {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--navy);
+  color: var(--paper);
   padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
   font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .event-notes {
   margin-top: 8px;
-  font-size: 13px;
-  color: var(--text-light);
+  font-size: 12px;
+  color: var(--gray);
   font-style: italic;
 }
 
-/* 表单样式 */
 .form-group {
   margin-bottom: 16px;
 }
 
 .form-group label {
   display: block;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 500;
   margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-group input,
@@ -406,15 +490,17 @@ body {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 14px;
-  font-family: inherit;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  transition: none;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary);
+  outline: 2px solid var(--navy);
+  outline-offset: -2px;
 }
 
 .form-row {
@@ -438,14 +524,14 @@ body {
 
 .color-swatch {
   display: block;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid transparent;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
 }
 
 .color-option input:checked + .color-swatch {
-  border-color: var(--text);
+  border: 2px solid var(--navy);
+  outline: 2px solid var(--paper);
 }
 
 .form-actions {
@@ -455,37 +541,40 @@ body {
   margin-top: 24px;
 }
 
-/* 首页样式 */
 .home-date-bar {
   margin-bottom: 24px;
 }
 
 .date-main {
-  font-size: 24px;
-  font-weight: 600;
+  font-family: var(--font-pixel);
+  font-size: 18px;
   margin-bottom: 4px;
+  letter-spacing: 1px;
 }
 
 .date-meta {
-  font-size: 14px;
-  color: var(--text-light);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gray);
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: 0.5px;
 }
 
 .holiday-tag {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--ink);
+  color: var(--paper);
   padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .status-card {
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--border);
-  border-radius: 12px;
   padding: 20px;
   margin-bottom: 24px;
 }
@@ -500,28 +589,43 @@ body {
 }
 
 .status-icon {
-  font-size: 32px;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: var(--paper);
 }
 
 .status-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
   margin-bottom: 4px;
+  letter-spacing: 0.3px;
 }
 
 .status-detail {
-  font-size: 14px;
-  color: var(--text-light);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray);
+  letter-spacing: 0.3px;
 }
 
 .status-done {
-  color: var(--text-light);
-  font-size: 16px;
+  color: var(--gray);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.5px;
 }
 
 .status-holiday {
-  color: #92400e;
-  font-size: 16px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.5px;
 }
 
 .home-section {
@@ -533,45 +637,54 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
 }
 
 .section-header h2 {
-  font-size: 18px;
+  font-family: var(--font-mono);
+  font-size: 13px;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .section-count {
-  font-size: 14px;
-  color: var(--text-light);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray);
+  letter-spacing: 0.5px;
 }
 
 .btn-small {
   padding: 4px 12px;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .course-card {
   display: flex;
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--border);
-  border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: none;
 }
 
 .course-card:hover {
-  border-color: var(--primary);
+  border-color: var(--navy);
+  border-width: 2px;
+  padding: 11px 15px;
 }
 
 .course-card.ended {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .course-card.current {
-  border-color: var(--primary);
-  background: var(--primary-light);
+  border: 2px solid var(--navy);
+  padding: 11px 15px;
+  background: rgba(46, 58, 140, 0.05);
 }
 
 .course-time {
@@ -580,40 +693,47 @@ body {
 }
 
 .course-period {
-  font-size: 12px;
-  color: var(--text-light);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray);
+  letter-spacing: 0.3px;
 }
 
 .course-time-range {
-  font-size: 14px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .course-info {
   flex: 1;
 }
 
-.course-name {
-  font-weight: 600;
-  font-size: 15px;
+.course-info .course-name {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 13px;
   margin-bottom: 4px;
+  letter-spacing: 0.3px;
 }
 
 .course-detail {
-  font-size: 13px;
-  color: var(--text-light);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray);
+  letter-spacing: 0.3px;
 }
 
 .event-item {
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--border);
-  border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 8px;
 }
 
 .event-item.done {
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .event-item.done .checkbox-label span {
@@ -621,13 +741,101 @@ body {
 }
 
 .event-time {
-  font-size: 13px;
-  color: var(--text-light);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray);
   margin-top: 4px;
+  letter-spacing: 0.3px;
 }
 
 .event-location {
-  font-size: 13px;
-  color: var(--text-light);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray);
   margin-top: 4px;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    padding: 0 16px;
+    flex-direction: column;
+    height: auto;
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .tabs {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tab {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+
+  .view {
+    padding: 16px;
+  }
+
+  .date-main {
+    font-family: var(--font-mono);
+    font-size: 16px;
+  }
+
+  .timetable-toolbar {
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    min-height: 44px;
+  }
+
+  .tab-btn {
+    padding: 8px 12px;
+    min-height: 44px;
+  }
+
+  .grid-header,
+  .grid-row {
+    grid-template-columns: 40px repeat(7, 1fr);
+  }
+
+  .period-cell {
+    padding: 4px;
+    font-size: 10px;
+  }
+
+  .grid-cell {
+    padding: 2px;
+    font-size: 10px;
+  }
+
+  .course-name {
+    font-size: 9px;
+  }
+
+  .course-room {
+    font-size: 8px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content {
+    padding: 16px;
+    width: 95%;
+  }
+
+  .event-card {
+    flex-direction: column;
+  }
+
+  .event-color {
+    width: 100%;
+    height: 3px;
+  }
 }

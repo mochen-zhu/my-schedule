@@ -13,10 +13,10 @@ App.views.events = {
     container.innerHTML = `
       <div class="events-toolbar">
         <div class="tabs-inline">
-          <button class="tab-btn ${this.currentTab === 'pending' ? 'active' : ''}" data-tab="pending">待办</button>
-          <button class="tab-btn ${this.currentTab === 'completed' ? 'active' : ''}" data-tab="completed">已完成</button>
+          <button class="tab-btn ${this.currentTab === 'pending' ? 'active' : ''}" data-tab="pending">PENDING</button>
+          <button class="tab-btn ${this.currentTab === 'completed' ? 'active' : ''}" data-tab="completed">DONE</button>
         </div>
-        <button class="btn btn-primary" id="add-event">＋ 新增</button>
+        <button class="btn btn-primary" id="add-event">＋ ADD</button>
       </div>
       <div id="events-list"></div>
     `;
@@ -39,7 +39,7 @@ App.views.events = {
     filtered.sort((a, b) => a.date.localeCompare(b.date));
 
     if (filtered.length === 0) {
-      list.innerHTML = `<div class="empty-state">暂无${this.currentTab === 'pending' ? '待办' : '已完成'}日程</div>`;
+      list.innerHTML = `<div class="empty-state">NO DATA</div>`;
       return;
     }
 
@@ -60,14 +60,14 @@ App.views.events = {
               </label>
               <div class="event-actions">
                 <button class="btn-icon edit-btn" data-id="${event.id}">✎</button>
-                <button class="btn-icon delete-btn" data-id="${event.id}"></button>
+                <button class="btn-icon delete-btn" data-id="${event.id}">✕</button>
               </div>
             </div>
             <div class="event-meta">
               <span>${event.date} ${weekday}</span>
               <span>${timeStr}</span>
-              ${event.location ? `<span>📍 ${event.location}</span>` : ''}
-              ${isOverdue ? '<span class="overdue-tag">逾期</span>' : ''}
+              ${event.location ? `<span>LOC / ${event.location}</span>` : ''}
+              ${isOverdue ? '<span class="overdue-tag">OVERDUE</span>' : ''}
             </div>
             ${event.notes ? `<div class="event-notes">${event.notes}</div>` : ''}
           </div>
@@ -80,7 +80,7 @@ App.views.events = {
   },
 
   getEventColor(colorIndex) {
-    const colors = ['#fbbf24', '#34d399', '#60a5fa', '#f87171', '#a78bfa', '#fb923c'];
+    const colors = ['#1F1D1A', '#2E3A8C', '#8A8578', '#5A5648', '#4A4F8A', '#6B6458'];
     return colors[(colorIndex - 1) % colors.length] || colors[0];
   },
 
@@ -126,36 +126,36 @@ App.views.events = {
   openEventModal(event = null) {
     const isEdit = !!event;
     const content = `
-      <h3>${isEdit ? '编辑日程' : '新建日程'}</h3>
+      <h3>${isEdit ? 'EDIT / 编辑' : 'NEW / 新建'}</h3>
       <form id="event-form">
         <div class="form-group">
-          <label>标题 *</label>
+          <label>TITLE / 标题 *</label>
           <input type="text" name="title" value="${event?.title || ''}" required>
         </div>
         <div class="form-group">
-          <label>日期 *</label>
+          <label>DATE / 日期 *</label>
           <input type="date" name="date" value="${event?.date || App.calendar.today()}" required>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>开始时间</label>
+            <label>START / 开始</label>
             <input type="time" name="startTime" value="${event?.startTime || ''}">
           </div>
           <div class="form-group">
-            <label>结束时间</label>
+            <label>END / 结束</label>
             <input type="time" name="endTime" value="${event?.endTime || ''}">
           </div>
         </div>
         <div class="form-group">
-          <label>地点</label>
+          <label>LOC / 地点</label>
           <input type="text" name="location" value="${event?.location || ''}">
         </div>
         <div class="form-group">
-          <label>备注</label>
+          <label>NOTES / 备注</label>
           <textarea name="notes" rows="3">${event?.notes || ''}</textarea>
         </div>
         <div class="form-group">
-          <label>颜色</label>
+          <label>COLOR / 颜色</label>
           <div class="color-picker">
             ${[1,2,3,4,5,6].map(i => `
               <label class="color-option">
@@ -166,8 +166,8 @@ App.views.events = {
           </div>
         </div>
         <div class="form-actions">
-          <button type="button" class="btn" onclick="App.modal.close()">取消</button>
-          <button type="submit" class="btn btn-primary">${isEdit ? '保存' : '创建'}</button>
+          <button type="button" class="btn" onclick="App.modal.close()">CANCEL</button>
+          <button type="submit" class="btn btn-primary">${isEdit ? 'SAVE' : 'CREATE'}</button>
         </div>
       </form>
     `;
@@ -213,11 +213,11 @@ App.views.events = {
 
   confirmDelete(id, title) {
     const content = `
-      <h3>确认删除</h3>
+      <h3>CONFIRM DELETE / 确认删除</h3>
       <p>确定要删除「${title}」吗？此操作不可撤销。</p>
       <div class="form-actions" style="margin-top: 24px;">
-        <button class="btn" onclick="App.modal.close()">取消</button>
-        <button class="btn btn-primary" id="confirm-delete">删除</button>
+        <button class="btn" onclick="App.modal.close()">CANCEL</button>
+        <button class="btn btn-primary" id="confirm-delete">DELETE</button>
       </div>
     `;
 

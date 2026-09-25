@@ -48,7 +48,7 @@ App.courses = {
   },
 
   getCourseColor(colorIndex) {
-    const colors = ['var(--course-1)', 'var(--course-2)', 'var(--course-3)', 'var(--course-4)', 'var(--course-5)', 'var(--course-6)'];
+    const colors = ['#1F1D1A', '#2E3A8C', '#5A5648', '#3D3A35', '#4A4F8A', '#6B6458'];
     return colors[(colorIndex - 1) % colors.length];
   }
 };

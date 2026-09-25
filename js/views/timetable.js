@@ -16,17 +16,17 @@ App.views.timetable = {
 
     container.innerHTML = `
       <div class="timetable-toolbar">
-        <button class="btn" id="prev-week" ${weekNum <= 1 ? 'disabled' : ''}>‹</button>
-        <span class="week-label">第 ${weekNum} 周</span>
-        <button class="btn" id="next-week" ${weekNum >= 19 ? 'disabled' : ''}>›</button>
+        <button class="btn" id="prev-week" ${weekNum <= 1 ? 'disabled' : ''}>◂ PREV</button>
+        <span class="week-label">W${String(weekNum).padStart(2, '0')}</span>
+        <button class="btn" id="next-week" ${weekNum >= 19 ? 'disabled' : ''}>NEXT ▸</button>
         <span class="date-range">${range.mon} – ${range.sun}</span>
-        <button class="btn btn-primary" id="back-to-current">回本周</button>
+        <button class="btn btn-primary" id="back-to-current">CUR</button>
       </div>
       <div id="holiday-notice"></div>
       <div class="timetable-grid">
         <div class="grid-header">
-          <div class="period-label">节次</div>
-          <div>周一</div><div>周二</div><div>周三</div><div>周四</div><div>周五</div><div>周六</div><div>周日</div>
+          <div class="period-label">P#</div>
+          <div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div><div>SUN</div>
         </div>
         <div class="grid-body" id="grid-body"></div>
       </div>
@@ -48,7 +48,6 @@ App.views.timetable = {
     let html = '';
     for (let period = 1; period <= 14; period++) {
       const periodInfo = App.calendar.PERIODS[period - 1];
-      const groupLabel = periodInfo.group;
 
       html += `<div class="grid-row" data-period="${period}">`;
       html += `<div class="period-cell">${period}<br><small>${periodInfo.start}</small></div>`;
@@ -59,7 +58,7 @@ App.views.timetable = {
         const isToday = (day === todayWeekday);
 
         if (isHoliday) {
-          html += `<div class="grid-cell holiday" data-day="${day}" data-period="${period}">休</div>`;
+          html += `<div class="grid-cell holiday" data-day="${day}" data-period="${period}">×</div>`;
         } else {
           const courses = coursesByDay[day].filter(c => c.periods[0] <= period && period <= c.periods[1]);
           const isStartPeriod = courses.length > 0 && courses[0].periods[0] === period;
@@ -68,7 +67,7 @@ App.views.timetable = {
             const course = courses[0];
             const rowSpan = course.periods[1] - course.periods[0] + 1;
             const color = App.courses.getCourseColor(course.color);
-            html += `<div class="grid-cell course" style="grid-row: span ${rowSpan}; background: ${color}20; border-left: 3px solid ${color};" data-course-id="${course.id}" data-day="${day}" data-period="${period}">
+            html += `<div class="grid-cell course" style="grid-row: span ${rowSpan}; background: ${color}12;" data-course-id="${course.id}" data-day="${day}" data-period="${period}">
               <div class="course-name">${course.name}</div>
               <div class="course-room">${course.room}</div>
             </div>`;
@@ -111,7 +110,7 @@ App.views.timetable = {
     }
 
     if (holidays.length > 0) {
-      notice.innerHTML = `<div class="holiday-bar">⚠ 本周含节假日：${holidays.join('、')}（节假日不上课）</div>`;
+      notice.innerHTML = `<div class="holiday-bar">▌ HOLIDAY: ${holidays.join('、')}（休）</div>`;
     }
   },
 
@@ -154,11 +153,11 @@ App.views.timetable = {
   showCourseDetail(course) {
     const content = `
       <h3>${course.name}</h3>
-      <p><strong>教师：</strong>${course.teacher}</p>
-      <p><strong>教室：</strong>${course.room}</p>
-      <p><strong>周次：</strong>第 ${course.weeks[0]}–${course.weeks[1]} 周</p>
-      <p><strong>节次：</strong>第 ${course.periods[0]}–${course.periods[1]} 节 (${App.calendar.periodsSpan(course.periods[0], course.periods[1])})</p>
-      <button class="btn btn-primary" onclick="App.modal.close()" style="margin-top: 16px; width: 100%;">关闭</button>
+      <p><strong>TEACHER / 教师：</strong>${course.teacher}</p>
+      <p><strong>ROOM / 教室：</strong>${course.room}</p>
+      <p><strong>WEEKS / 周次：</strong>W${course.weeks[0]}–W${course.weeks[1]}</p>
+      <p><strong>PERIODS / 节次：</strong>P${course.periods[0]}–P${course.periods[1]} (${App.calendar.periodsSpan(course.periods[0], course.periods[1])})</p>
+      <button class="btn btn-primary" onclick="App.modal.close()" style="margin-top: 16px; width: 100%;">CLOSE</button>
     `;
     App.modal.open(content);
   }
