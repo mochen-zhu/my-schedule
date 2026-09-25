@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 1 数据层测试</title>
+</head>
+<body>
+  <h1>Phase 1 测试</h1>
+  <pre id="results"></pre>
+  <script src="js/main.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/courses.js"></script>
+  <script src="js/store.js"></script>
+  <script>
+    const results = [];
+    function test(name, fn) {
+      try {
+        const result = fn();
+        results.push(`✓ ${name}: ${result}`);
+      } catch (e) {
+        results.push(`✗ ${name}: ${e.message}`);
+      }
+    }
+
+    // 测试日历模块
+    test('getWeekNumber(2026-09-25) === 3', () => {
+      const w = App.calendar.getWeekNumber('2026-09-25');
+      if (w !== 3) throw new Error(`Expected 3, got ${w}`);
+      return w;
+    });
+
+    test('getWeekNumber(2026-10-08) === 5', () => {
+      const w = App.calendar.getWeekNumber('2026-10-08');
+      if (w !== 5) throw new Error(`Expected 5, got ${w}`);
+      return w;
+    });
+
+    test('getWeekNumber(2026-09-01) === null (before semester)', () => {
+      const w = App.calendar.getWeekNumber('2026-09-01');
+      if (w !== null) throw new Error(`Expected null, got ${w}`);
+      return w;
+    });
+
+    test('isHoliday(2026-10-01) === true', () => {
+      if (!App.calendar.isHoliday('2026-10-01')) throw new Error('Expected true');
+      return true;
+    });
+
+    test('isHoliday(2026-09-26) === false', () => {
+      if (App.calendar.isHoliday('2026-09-26')) throw new Error('Expected false');
+      return false;
+    });
+
+    test('getHolidayName(2026-09-25) === 中秋节', () => {
+      const name = App.calendar.getHolidayName('2026-09-25');
+      if (name !== '中秋节') throw new Error(`Expected 中秋节, got ${name}`);
+      return name;
+    });
+
+    test('periodsSpan(4, 5) === 10:40–12:15', () => {
+      const span = App.calendar.periodsSpan(4, 5);
+      if (span !== '10:40–12:15') throw new Error(`Expected 10:40–12:15, got ${span}`);
+      return span;
+    });
+
+    test('getWeekDateRange(3) === {mon: 2026-09-21, sun: 2026-09-27}', () => {
+      const range = App.calendar.getWeekDateRange(3);
+      if (range.mon !== '2026-09-21' || range.sun !== '2026-09-27') {
+        throw new Error(`Expected {mon: 2026-09-21, sun: 2026-09-27}, got ${JSON.stringify(range)}`);
+      }
+      return JSON.stringify(range);
+    });
+
+    // 测试课程模块
+    test('coursesForWeek(6) includes week-6-only course', () => {
+      const courses = App.courses.coursesForWeek(6);
+      const hasWeek6Only = courses.some(c => c.name === '形势与政策');
+      if (!hasWeek6Only) throw new Error('Missing week-6-only course');
+      return courses.length + ' courses';
+    });
+
+    test('coursesForWeek(1) excludes week-2-start courses', () => {
+      const courses = App.courses.coursesForWeek(1);
+      if (courses.length !== 0) throw new Error(`Expected 0 courses in week 1, got ${courses.length}`);
+      return courses.length + ' courses';
+    });
+
+    test('coursesByDay(3) groups by day', () => {
+      const byDay = App.courses.coursesByDay(3);
+      if (!byDay[3] || byDay[3].length === 0) throw new Error('No courses on Wednesday');
+      return `Wed: ${byDay[3].length} courses`;
+    });
+
+    // 测试存储模块
+    test('addEvent + loadEvents persists', () => {
+      const id = App.store.addEvent({ title: 'Test', date: '2026-09-25', startTime: '10:00' });
+      const events = App.store.loadEvents();
+      const found = events.find(e => e.id === id);
+      if (!found) throw new Error('Event not found after add');
+      if (found.title !== 'Test') throw new Error('Title mismatch');
+      App.store.deleteEvent(id); // cleanup
+      return id;
+    });
+
+    test('toggleDone works', () => {
+      const id = App.store.addEvent({ title: 'Toggle Test', date: '2026-09-25', startTime: '10:00' });
+      App.store.toggleDone(id);
+      const events = App.store.loadEvents();
+      const event = events.find(e => e.id === id);
+      if (!event.done) throw new Error('Expected done=true');
+      App.store.toggleDone(id);
+      const events2 = App.store.loadEvents();
+      const event2 = events2.find(e => e.id === id);
+      if (event2.done) throw new Error('Expected done=false after second toggle');
+      App.store.deleteEvent(id);
+      return 'ok';
+    });
+
+    test('eventsOnDate filters by date', () => {
+      App.store.addEvent({ title: 'Event A', date: '2026-09-25', startTime: '10:00' });
+      App.store.addEvent({ title: 'Event B', date: '2026-09-26', startTime: '10:00' });
+      const events = App.store.eventsOnDate('2026-09-25');
+      if (events.length !== 1) throw new Error(`Expected 1 event, got ${events.length}`);
+      if (events[0].title !== 'Event A') throw new Error('Wrong event');
+      App.store.deleteEvent(events[0].id);
+      const events2 = App.store.loadEvents();
+      events2.forEach(e => { if (e.date === '2026-09-26') App.store.deleteEvent(e.id); });
+      return events.length + ' event';
+    });
+
+    document.getElementById('results').textContent = results.join('\n');
+    console.log(results.join('\n'));
+  </script>
+</body>
+</html>
